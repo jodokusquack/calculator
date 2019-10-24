@@ -1,0 +1,52 @@
+/* Reset */
+p {
+  margin: 0;
+}
+
+/* CSS */
+body {
+  margin: auto auto;
+  text-align: center;
+}
+
+#calculator {
+  margin-top: 10%;
+  padding: 15px;
+  border: 2px solid black;
+  border-radius: 20px;
+  display: inline-block;
+  background: #bdc3c7;  /* fallback for old browsers */
+  background: -webkit-linear-gradient(to top, #2c3e50, #bdc3c7);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to top, #2c3e50, #bdc3c7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+}
+
+/* Display Part */
+#display {
+  font-family: 'Iceland', cursive;
+  border: 1px solid black;
+  border-radius: 5px;
+  margin-bottom: 25px;
+  background: rgba(240, 138, 6, 0.8);
+}
+
+#display .previousResult {
+  
+  height: 40px;
+  vertical-align: middle;
+  font-size: 30px;
+}
+
+#display .expression {
+  border-top: 1px solid rgb(136, 136, 136);
+  font-size: 72px;
+}
+
+
+/* Buttons Part */
+#buttons {
+  display: grid;
+  grid-template-columns: repeat(4, 100px);
+  grid-template-rows: repeat(5, 50px);
+
+}
