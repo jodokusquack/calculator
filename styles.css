@@ -30,16 +30,31 @@ body {
   background: rgba(240, 138, 6, 0.8);
 }
 
+
+#display .history {
+  height: 123px;
+  display: table-cell; 
+  vertical-align: bottom;
+}
+
+#display .container {
+  max-height: 123px;
+  overflow: auto;
+}
+
+
 #display .previousResult {
-  
   height: 40px;
-  vertical-align: middle;
+  text-align: right;
   font-size: 30px;
+  border-top: 1px solid rgb(104, 92, 92);
+  display: block;
 }
 
 #display .expression {
-  border-top: 1px solid rgb(136, 136, 136);
+  border-top: 1px solid rgb(0, 0, 0);
   font-size: 72px;
+  height: 70px;
 }
 
 

@@ -1,3 +1,4 @@
+/* eslint-disable no-use-before-define */
 /* eslint no-underscore-dangle: 0 */
 
 // Define calculation types
@@ -57,6 +58,7 @@ class Calculation {
     this.expression = [];
     this.tempType = '';
     this.tempNumber = '';
+    this.result = 0;
   }
 
   display() {
@@ -78,6 +80,18 @@ class Calculation {
     this.tempNumber += number;
   }
 
+  evaluate() {
+    // Add a history to the calculator
+    const lastExpression = document.createElement('p');
+    lastExpression.classList.add('previousResult');
+    lastExpression.textContent = currentExpression.text;
+    containerField.appendChild(lastExpression);
+    containerField.scrollTop = containerField.scrollHeight;
+
+    // For now
+    this.result = 0;
+  }
+
   // Getters and Setters
 
   set text(newText) {
@@ -97,20 +111,30 @@ class Calculation {
     return this._type;
   }
 }
+function clear() {
+  // Make a new Calculation
+  currentExpression = new Calculation('', expressionField);
+  currentExpression.display();
+}
 
-
+const displayField = document.querySelector('#display');
+const historyField = document.querySelector('#display .history');
+const containerField = document.querySelector('#display .container');
 const expressionField = document.querySelector('#display .expression');
 
 const numberButtons = document.querySelectorAll('#buttons .number');
+const clearButton = document.querySelector('#buttons .clear');
+const equalsButton = document.querySelector('#buttons .equals');
 
-const currentExpression = new Calculation('1+2', expressionField);
+let currentExpression = new Calculation('1+2', expressionField);
 currentExpression.display();
 currentExpression.updateText('3x9');
 
 
-// Continue Here, ALSO MAke GIT !!!!!!!
-numberButtons.forEach((button) => button.addEventListener('onlick', (e) => {
+numberButtons.forEach((button) => button.addEventListener('click', (e) => {
   const current = currentExpression;
   current.numberPressed(e.target.id);
-  console.log(e.target.id);
 }));
+
+clearButton.addEventListener('click', clear);
+equalsButton.addEventListener('click', currentExpression.evaluate);
