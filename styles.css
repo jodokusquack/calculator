@@ -28,6 +28,7 @@ body {
   border-radius: 5px;
   margin-bottom: 25px;
   background: rgba(121, 207, 9, 0.8);
+  max-width: 402px;
 }
 
 

@@ -56,7 +56,6 @@ class Calculation {
     this._text = text;
     this.place = place;
     this.expression = [];
-    this.tempType = '';
     this.tempNumber = '';
     this.result = 0;
   }
@@ -70,14 +69,13 @@ class Calculation {
     this.display();
   }
 
-  updateExpression() {
+  updateExpression(type) {
     this.expression.push(Number(this.tempNumber));
-    this.expression.push(this.tempType);
-  }
+    this.expression.push(type);
+    console.log(this.expression);
 
-  numberPressed(number) {
-    this.updateText(number);
-    this.tempNumber += number;
+    // Reset tempNumber
+    this.tempNumber = '';
   }
 
   evaluate() {
@@ -102,38 +100,68 @@ class Calculation {
   get text() {
     return this._text;
   }
-
-  set type(operation) {
-    this._type = operation;
-  }
-
-  get type() {
-    return this._type;
-  }
 }
+
+function numberPressed(number) {
+  currentExpression.updateText(number);
+  currentExpression.tempNumber += number;
+}
+
+function normalOperatorPressed(operator) {
+  currentExpression.updateExpression(operator);
+
+  let operatorText = '';
+  switch (operator) {
+    case 'add':
+      operatorText = ' + ';
+      break;
+    case 'subtract':
+      operatorText = ' - ';
+      break;
+    case 'multiply':
+      operatorText = ' x ';
+      break;
+    case 'divide':
+      operatorText = ' / ';
+      break;
+    default:
+      operatorText = '';
+  }
+
+  console.log(operatorText);
+  currentExpression.updateText(operatorText);
+  currentExpression.display();
+}
+
 function clear() {
   // Make a new Calculation
   currentExpression = new Calculation('', expressionField);
   currentExpression.display();
 }
 
+
+// DOM-Nodes
 const displayField = document.querySelector('#display');
 const historyField = document.querySelector('#display .history');
 const containerField = document.querySelector('#display .container');
 const expressionField = document.querySelector('#display .expression');
 
 const numberButtons = document.querySelectorAll('#buttons .number');
+const operatorButtons = document.querySelectorAll('#buttons .operator');
 const clearButton = document.querySelector('#buttons .clear');
 const equalsButton = document.querySelector('#buttons .equals');
 
-let currentExpression = new Calculation('1+2', expressionField);
+// Initiate Calculator with new Calculation
+let currentExpression = new Calculation('', expressionField);
 currentExpression.display();
-currentExpression.updateText('3x9');
 
-
+// Attach event Listeners
 numberButtons.forEach((button) => button.addEventListener('click', (e) => {
-  const current = currentExpression;
-  current.numberPressed(e.target.id);
+  numberPressed(e.target.id);
+}));
+operatorButtons.forEach((button) => button.addEventListener('click', (e) => {
+  normalOperatorPressed(e.target.id);
+  console.log(e.target.id);
 }));
 
 clearButton.addEventListener('click', clear);
