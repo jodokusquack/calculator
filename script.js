@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable no-use-before-define */
 /* eslint no-underscore-dangle: 0 */
 
@@ -33,11 +34,11 @@ function root(a, b = 2) {
 // Operate function
 function operate(a, b, operator) {
   switch (operator) {
-    case 'plus':
+    case 'add':
       return add(a, b);
-    case 'minus':
+    case 'subtract':
       return subtract(a, b);
-    case 'times':
+    case 'multiply':
       return multiply(a, b);
     case 'divide':
       return divide(a, b);
@@ -56,7 +57,7 @@ class Calculation {
     this._text = text;
     this.place = place;
     this.expression = [];
-    this.tempNumber = '';
+    this.tempNumber = text;
     this.result = 0;
   }
 
@@ -72,22 +73,50 @@ class Calculation {
   updateExpression(type) {
     this.expression.push(Number(this.tempNumber));
     this.expression.push(type);
-    console.log(this.expression);
 
     // Reset tempNumber
     this.tempNumber = '';
   }
 
   evaluate() {
+    // Check if expression is well formed
+
+    // if (typeof (this.expression[length - 1]) !== 'number') {
+    //   return;
+    // }
+
+    this.expression.push(Number(this.tempNumber));
+
+
+    let a;
+    let b;
+    let type;
+
+    this.result = this.expression.reduce((accumulator, currentValue) => {
+      if (!a) {
+        a = currentValue;
+        accumulator = currentValue;
+      } else if (!type) {
+        type = currentValue;
+        accumulator = a;
+      } else if (!b) {
+        a = operate(a, currentValue, type);
+        accumulator = a;
+        type = '';
+      }
+      return accumulator;
+    }, 0);
+
     // Add a history to the calculator
+    this.updateText(` = ${this.result}`);
     const lastExpression = document.createElement('p');
     lastExpression.classList.add('previousResult');
     lastExpression.textContent = currentExpression.text;
     containerField.appendChild(lastExpression);
     containerField.scrollTop = containerField.scrollHeight;
 
-    // For now
-    this.result = 0;
+    currentExpression = new Calculation(String(this.result), expressionField);
+    currentExpression.display();
   }
 
   // Getters and Setters
@@ -128,7 +157,6 @@ function normalOperatorPressed(operator) {
       operatorText = '';
   }
 
-  console.log(operatorText);
   currentExpression.updateText(operatorText);
   currentExpression.display();
 }
@@ -161,8 +189,9 @@ numberButtons.forEach((button) => button.addEventListener('click', (e) => {
 }));
 operatorButtons.forEach((button) => button.addEventListener('click', (e) => {
   normalOperatorPressed(e.target.id);
-  console.log(e.target.id);
 }));
 
 clearButton.addEventListener('click', clear);
-equalsButton.addEventListener('click', currentExpression.evaluate);
+equalsButton.addEventListener('click', () => {
+  currentExpression.evaluate();
+});
