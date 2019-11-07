@@ -78,12 +78,47 @@ class Calculation {
     this.tempNumber = '';
   }
 
-  evaluate() {
-    // Check if expression is well formed
+  numberPressed(number) {
+    this.updateText(number);
+    this.tempNumber += number;
+  }
 
-    // if (typeof (this.expression[length - 1]) !== 'number') {
-    //   return;
-    // }
+  normalOperatorPressed(operator) {
+    let operatorText = '';
+    switch (operator) {
+      case 'add':
+        operatorText = ' + ';
+        break;
+      case 'subtract':
+        operatorText = ' - ';
+        break;
+      case 'multiply':
+        operatorText = ' x ';
+        break;
+      case 'divide':
+        operatorText = ' / ';
+        break;
+      default:
+        operatorText = '';
+    }
+
+    if (typeof this.expression[this.expression.length - 1] === 'string' && !this.tempNumber) {
+      this.expression.pop();
+      this.expression.push(operator);
+      this.text = this._text.replace(/\s[+\-x/]\s$/, operatorText);
+    } else {
+      this.updateExpression(operator);
+
+      // Update text
+      this.updateText(operatorText);
+      this.display();
+    }
+  }
+
+  evaluate() {
+    if (this.tempNumber === '' || this.expression.length === 0) {
+      return;
+    }
 
     this.expression.push(Number(this.tempNumber));
 
@@ -93,13 +128,17 @@ class Calculation {
     let type;
 
     this.result = this.expression.reduce((accumulator, currentValue) => {
-      if (!a) {
+      // if (Array.isArray(currentValue)) {
+      //   currentValue = currentValue.reduce(calculate(accumulator, currentValue));
+      //   console.log('Going deeper');
+      // }
+      if (a === undefined) {
         a = currentValue;
         accumulator = currentValue;
       } else if (!type) {
         type = currentValue;
         accumulator = a;
-      } else if (!b) {
+      } else if (b === undefined) {
         a = operate(a, currentValue, type);
         accumulator = a;
         type = '';
@@ -131,35 +170,26 @@ class Calculation {
   }
 }
 
-function numberPressed(number) {
-  currentExpression.updateText(number);
-  currentExpression.tempNumber += number;
-}
+// function format(number) {
+//   let numberString = String(number);
+//   if (numberString.length <= 10) {
+//     return number
+//   } else {
+//     if (numberString[9] === ".") {
+//       if (Number(numberString[10]) >= 5) {
+//         return Number(numberString.slice(0,8) + String(Number(numberString[8] + 1)));
+//       } else {
+//         return Number(numberString.slice(0, 9));
+//       }
+//     } else {
+//       if (Number(numberString[10]) >= 5) {
+//         return Number(numberString.slice(0, 9) + String(Number(numberString[9] + 1)));
+//       }
+//         return Number(numberString.slice(0, 10));
 
-function normalOperatorPressed(operator) {
-  currentExpression.updateExpression(operator);
-
-  let operatorText = '';
-  switch (operator) {
-    case 'add':
-      operatorText = ' + ';
-      break;
-    case 'subtract':
-      operatorText = ' - ';
-      break;
-    case 'multiply':
-      operatorText = ' x ';
-      break;
-    case 'divide':
-      operatorText = ' / ';
-      break;
-    default:
-      operatorText = '';
-  }
-
-  currentExpression.updateText(operatorText);
-  currentExpression.display();
-}
+//     }
+//   }
+// }
 
 function clear() {
   // Make a new Calculation
@@ -185,13 +215,13 @@ currentExpression.display();
 
 // Attach event Listeners
 numberButtons.forEach((button) => button.addEventListener('click', (e) => {
-  numberPressed(e.target.id);
+  currentExpression.numberPressed(e.target.id);
 }));
 operatorButtons.forEach((button) => button.addEventListener('click', (e) => {
-  normalOperatorPressed(e.target.id);
+  currentExpression.normalOperatorPressed(e.target.id);
 }));
-
-clearButton.addEventListener('click', clear);
 equalsButton.addEventListener('click', () => {
   currentExpression.evaluate();
 });
+
+clearButton.addEventListener('click', clear);
