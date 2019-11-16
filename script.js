@@ -115,36 +115,43 @@ class Calculation {
     }
   }
 
-  evaluate() {
-    if (this.tempNumber === '' || this.expression.length === 0) {
-      return;
-    }
+  evaluate(expression) {
+    function init() {
+      let a;
+      let b;
+      let type;
 
-    this.expression.push(Number(this.tempNumber));
-
-
-    let a;
-    let b;
-    let type;
-
-    this.result = this.expression.reduce((accumulator, currentValue) => {
-      // if (Array.isArray(currentValue)) {
-      //   currentValue = currentValue.reduce(calculate(accumulator, currentValue));
-      //   console.log('Going deeper');
-      // }
-      if (a === undefined) {
-        a = currentValue;
-        accumulator = currentValue;
-      } else if (!type) {
-        type = currentValue;
-        accumulator = a;
-      } else if (b === undefined) {
-        a = operate(a, currentValue, type);
-        accumulator = a;
-        type = '';
+      function reduceExpression(accumulator, currentValue) {
+        console.log(currentValue);
+        if (Array.isArray(currentValue)) {
+          const newReducer = init();
+          currentValue = currentValue.reduce(newReducer, 0);
+          console.log('Going deeper');
+        }
+        if (a === undefined) {
+          a = currentValue;
+          accumulator = currentValue;
+          console.log('a set');
+        } else if (!type) {
+          type = currentValue;
+          accumulator = a;
+          console.log('type set');
+        } else if (b === undefined) {
+          a = operate(a, currentValue, type);
+          accumulator = a;
+          type = '';
+          console.log('acc set');
+        }
+        console.log('next');
+        return accumulator;
       }
-      return accumulator;
-    }, 0);
+
+      return reduceExpression;
+    }
+    const recursiveReducer = init();
+
+
+    this.result = expression.reduce(recursiveReducer, 0);
 
     // Add a history to the calculator
     this.updateText(` = ${this.result}`);
@@ -190,6 +197,7 @@ class Calculation {
 //     }
 //   }
 // }
+
 
 function clear() {
   // Make a new Calculation
