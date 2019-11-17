@@ -28,7 +28,7 @@ body {
   border-radius: 5px;
   margin-bottom: 25px;
   background: rgba(121, 207, 9, 0.8);
-  max-width: 402px;
+  width: 402px;
 }
 
 
@@ -61,7 +61,8 @@ body {
   height: 70px;
   text-align: right;
   padding-right: 10px;
-  overflow: auto;
+  overflow-x: auto;
+  white-space: nowrap;
 }
 
 

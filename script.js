@@ -81,6 +81,7 @@ class Calculation {
   numberPressed(number) {
     this.updateText(number);
     this.tempNumber += number;
+    expressionField.scrollLeft = expressionField.scrollWidth;
   }
 
   normalOperatorPressed(operator) {
@@ -111,7 +112,7 @@ class Calculation {
 
       // Update text
       this.updateText(operatorText);
-      this.display();
+      expressionField.scrollLeft = expressionField.scrollWidth;
     }
   }
 
@@ -135,6 +136,7 @@ class Calculation {
 
     currentExpression = new Calculation(String(this.result), expressionField);
     currentExpression.display();
+    expressionField.scrollLeft = 0;
   }
 
   // eslint-disable-next-line class-methods-use-this
