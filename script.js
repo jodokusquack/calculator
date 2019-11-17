@@ -145,27 +145,21 @@ class Calculation {
       let type;
 
       function reduceExpression(accumulator, currentValue) {
-        console.log(currentValue);
         if (Array.isArray(currentValue)) {
           const newReducer = init();
           currentValue = currentValue.reduce(newReducer, 0);
-          console.log('Going deeper');
         }
         if (a === undefined) {
           a = currentValue;
           accumulator = currentValue;
-          console.log('a set');
         } else if (!type) {
           type = currentValue;
           accumulator = a;
-          console.log('type set');
         } else if (b === undefined) {
           a = operate(a, currentValue, type);
           accumulator = a;
           type = '';
-          console.log('acc set');
         }
-        console.log('next');
         return accumulator;
       }
 
