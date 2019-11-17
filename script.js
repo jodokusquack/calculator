@@ -99,6 +99,9 @@ class Calculation {
       case 'divide':
         operatorText = ' / ';
         break;
+      case 'power':
+        operatorText = ' ^ ';
+        break;
       default:
         operatorText = '';
     }
@@ -179,6 +182,12 @@ class Calculation {
   }
 
   reformExpression() {
+    while (this.expression.includes('power')) {
+      const index = this.expression.indexOf('power');
+
+      this.expression.splice(index - 1, 3, [this.expression[index - 1],
+        this.expression[index], this.expression[index + 1]]);
+    }
     while (this.expression.includes('multiply') || this.expression.includes('divide')) {
       const index = this.expression.findIndex((item) => item === 'multiply' || item === 'divide');
 
@@ -186,6 +195,25 @@ class Calculation {
         this.expression[index], this.expression[index + 1]]);
     }
   }
+
+  negate() {
+    if (Number(this.tempNumber) > 0) {
+      this.text = `${this.text.slice(0, -this.tempNumber.length)}-${this.text.slice(-this.tempNumber.length)}`;
+    } else if (Number(this.tempNumber) < 0) {
+      this.text = this.text.slice(0, -this.tempNumber.length)
+      + this.text.slice(-this.tempNumber.length + 1);
+    }
+    this.tempNumber = String(this.tempNumber * -1);
+  }
+
+  decimal() {
+    if (!Number.isInteger(this.tempNumber)) {
+      this.updateText('.');
+      this.tempNumber += '.';
+      expressionField.scrollLeft = expressionField.scrollWidth;
+    }
+  }
+
   // Getters and Setters
 
   set text(newText) {
@@ -196,28 +224,7 @@ class Calculation {
   get text() {
     return this._text;
   }
-}
-
-// function format(number) {
-//   let numberString = String(number);
-//   if (numberString.length <= 10) {
-//     return number
-//   } else {
-//     if (numberString[9] === ".") {
-//       if (Number(numberString[10]) >= 5) {
-//         return Number(numberString.slice(0,8) + String(Number(numberString[8] + 1)));
-//       } else {
-//         return Number(numberString.slice(0, 9));
-//       }
-//     } else {
-//       if (Number(numberString[10]) >= 5) {
-//         return Number(numberString.slice(0, 9) + String(Number(numberString[9] + 1)));
-//       }
-//         return Number(numberString.slice(0, 10));
-
-//     }
-//   }
-// }
+} // Object ends
 
 
 function clear() {
@@ -237,6 +244,8 @@ const numberButtons = document.querySelectorAll('#buttons .number');
 const operatorButtons = document.querySelectorAll('#buttons .operator');
 const clearButton = document.querySelector('#buttons .clear');
 const equalsButton = document.querySelector('#buttons .equals');
+const negativeButton = document.querySelector('#buttons .negative');
+const decimalButton = document.querySelector('#buttons .decimalPoint');
 
 // Initiate Calculator with new Calculation
 let currentExpression = new Calculation('', expressionField);
@@ -246,11 +255,21 @@ currentExpression.display();
 numberButtons.forEach((button) => button.addEventListener('click', (e) => {
   currentExpression.numberPressed(e.target.id);
 }));
+
 operatorButtons.forEach((button) => button.addEventListener('click', (e) => {
   currentExpression.normalOperatorPressed(e.target.id);
 }));
+
 equalsButton.addEventListener('click', () => {
   currentExpression.evaluatePressed();
 });
 
 clearButton.addEventListener('click', clear);
+
+negativeButton.addEventListener('click', () => {
+  currentExpression.negate();
+});
+
+decimalButton.addEventListener('click', () => {
+  currentExpression.decimal();
+});
