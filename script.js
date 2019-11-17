@@ -27,9 +27,6 @@ function power(a, b) {
   return a ** b;
 }
 
-function root(a, b = 2) {
-  return a ** (1 / b);
-}
 
 // Operate function
 function operate(a, b, operator) {
@@ -44,8 +41,6 @@ function operate(a, b, operator) {
       return divide(a, b);
     case 'power':
       return power(a, b);
-    case 'root':
-      return root(a, b);
     default:
       return 'Please input two numbers and an operator.';
   }
@@ -214,6 +209,12 @@ class Calculation {
     }
   }
 
+  root() {
+    this.text = this.text.slice(0, -this.tempNumber.length);
+    this.tempNumber = Math.sqrt(this.tempNumber);
+    this.updateText(this.tempNumber);
+  }
+
   // Getters and Setters
 
   set text(newText) {
@@ -235,8 +236,8 @@ function clear() {
 
 
 // DOM-Nodes
-const displayField = document.querySelector('#display');
-const historyField = document.querySelector('#display .history');
+// const displayField = document.querySelector('#display');
+// const historyField = document.querySelector('#display .history');
 const containerField = document.querySelector('#display .container');
 const expressionField = document.querySelector('#display .expression');
 
@@ -246,6 +247,7 @@ const clearButton = document.querySelector('#buttons .clear');
 const equalsButton = document.querySelector('#buttons .equals');
 const negativeButton = document.querySelector('#buttons .negative');
 const decimalButton = document.querySelector('#buttons .decimalPoint');
+const rootButton = document.querySelector('#buttons .root');
 
 // Initiate Calculator with new Calculation
 let currentExpression = new Calculation('', expressionField);
@@ -272,4 +274,8 @@ negativeButton.addEventListener('click', () => {
 
 decimalButton.addEventListener('click', () => {
   currentExpression.decimal();
+});
+
+rootButton.addEventListener('click', () => {
+  currentExpression.root();
 });
