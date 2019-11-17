@@ -115,6 +115,29 @@ class Calculation {
     }
   }
 
+  evaluatePressed() {
+    if (this.expression.length === 0) {
+      return;
+    }
+
+
+    this.expression.push(Number(this.tempNumber));
+    this.reformExpression();
+    this.result = this.evaluate(this.expression);
+
+    // Add a history to the calculator
+    this.updateText(` = ${this.result}`);
+    const lastExpression = document.createElement('p');
+    lastExpression.classList.add('previousResult');
+    lastExpression.textContent = currentExpression.text;
+    containerField.appendChild(lastExpression);
+    containerField.scrollTop = containerField.scrollHeight;
+
+    currentExpression = new Calculation(String(this.result), expressionField);
+    currentExpression.display();
+  }
+
+  // eslint-disable-next-line class-methods-use-this
   evaluate(expression) {
     function init() {
       let a;
@@ -150,21 +173,17 @@ class Calculation {
     }
     const recursiveReducer = init();
 
-
-    this.result = expression.reduce(recursiveReducer, 0);
-
-    // Add a history to the calculator
-    this.updateText(` = ${this.result}`);
-    const lastExpression = document.createElement('p');
-    lastExpression.classList.add('previousResult');
-    lastExpression.textContent = currentExpression.text;
-    containerField.appendChild(lastExpression);
-    containerField.scrollTop = containerField.scrollHeight;
-
-    currentExpression = new Calculation(String(this.result), expressionField);
-    currentExpression.display();
+    return expression.reduce(recursiveReducer, 0);
   }
 
+  reformExpression() {
+    while (this.expression.includes('multiply') || this.expression.includes('divide')) {
+      const index = this.expression.findIndex((item) => item === 'multiply' || item === 'divide');
+
+      this.expression.splice(index - 1, 3, [this.expression[index - 1],
+        this.expression[index], this.expression[index + 1]]);
+    }
+  }
   // Getters and Setters
 
   set text(newText) {
@@ -229,7 +248,7 @@ operatorButtons.forEach((button) => button.addEventListener('click', (e) => {
   currentExpression.normalOperatorPressed(e.target.id);
 }));
 equalsButton.addEventListener('click', () => {
-  currentExpression.evaluate();
+  currentExpression.evaluatePressed();
 });
 
 clearButton.addEventListener('click', clear);
