@@ -209,6 +209,25 @@ class Calculation {
     this.updateText(this.tempNumber);
   }
 
+  backspace() {
+    if (this.expression.length === 0 && this.tempNumber === '') {
+      return;
+    }
+
+    if (this.tempNumber !== '') {
+      this.text = this.text.slice(0, -1);
+      this.tempNumber = this.tempNumber.slice(0, -1);
+      console.log(this.tempNumber);
+      console.log(this.expression);
+    } else if (this.tempNumber === '') {
+      this.text = this.text.slice(0, -3);
+      this.expression.pop();
+      this.tempNumber = this.expression.pop();
+      console.log(this.tempNumber);
+      console.log(this.expression);
+    }
+  }
+
   // Getters and Setters
 
   set text(newText) {
@@ -242,6 +261,7 @@ const equalsButton = document.querySelector('#buttons .equals');
 const negativeButton = document.querySelector('#buttons .negative');
 const decimalButton = document.querySelector('#buttons .decimalPoint');
 const rootButton = document.querySelector('#buttons .root');
+const backspaceButton = document.querySelector('#buttons .backspace');
 
 // Initiate Calculator with new Calculation
 let currentExpression = new Calculation('', expressionField);
@@ -272,4 +292,8 @@ decimalButton.addEventListener('click', () => {
 
 rootButton.addEventListener('click', () => {
   currentExpression.root();
+});
+
+backspaceButton.addEventListener('click', () => {
+  currentExpression.backspace();
 });
