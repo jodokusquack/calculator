@@ -4,20 +4,25 @@ p {
 }
 
 /* CSS */
+html {
+  background-image: url('images/background.jpg');
+  height: 100%;
+}
 body {
   margin: auto auto;
   text-align: center;
+  height: 100%;
 }
 
 #calculator {
-  margin-top: 10%;
-  padding: 15px;
+  margin-top: 50px;
+  padding: 25px;
   border: 2px solid black;
   border-radius: 20px;
   display: inline-block;
   background: #bdc3c7;  /* fallback for old browsers */
-  background: -webkit-linear-gradient(to top, #2c3e50, #bdc3c7);  /* Chrome 10-25, Safari 5.1-6 */
-  background: linear-gradient(to top, #2c3e50, #bdc3c7); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  background: -webkit-linear-gradient(to top, #014f9c, #bdc3c7);  /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(to top, #136bc2, #132836); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
 }
 
@@ -27,7 +32,7 @@ body {
   border: 1px solid black;
   border-radius: 5px;
   margin-bottom: 25px;
-  background: rgba(121, 207, 9, 0.8);
+  background: rgba(173, 231, 222, 0.8);
   width: 402px;
 }
 
@@ -69,7 +74,75 @@ body {
 /* Buttons Part */
 #buttons {
   display: grid;
-  grid-template-columns: repeat(4, 100px);
-  grid-template-rows: repeat(5, 50px);
+  grid-template-columns: repeat(5, 75px);
+  grid-template-rows: repeat(5, 75px);
+  grid-template-areas:
+    "clear operators operators operators operators"
+    "clear numbers numbers numbers minus"
+    "backspace numbers numbers numbers plus"
+    "backspace numbers numbers numbers equals"
+    "negate zero zero decimal equals";
+  justify-content: center;
+}
 
+#buttons button {
+  font-size: 33px;
+  font-family: 'Roboto', sans-serif;
+  cursor: pointer;
+}
+
+/* Grid formatting */
+
+#backspace {
+  grid-area: backspace;
+}
+#clear {
+  grid-area: clear;
+}
+#buttons .numbers {
+  grid-area: numbers;
+  display: grid;
+  grid-template-columns: repeat(3, 75px);
+  grid-template-rows: repeat(3, 75px);
+}
+#buttons .operators {
+  grid-area: operators;
+  display: grid;
+  grid-template-columns: repeat(4, 75px);
+}
+#buttons .minus {
+  grid-area: minus;
+}
+#buttons .plus {
+  grid-area: plus;
+}
+#equals {
+  grid-area: equals;
+}
+#negative {
+  grid-area: negate;
+}
+#buttons .zero {
+  grid-area: zero;
+}
+#point {
+  grid-area: decimal;
+}
+
+/* Contact Part */
+#contact {
+  font-family: 'Roboto', sans-serif;
+  position: relative;
+  top: 100px;
+  display: inline-block;
+  padding: 10px 30px 5px;
+  background-color: rgba(255, 255, 255, 0.9);
+  width: 500px;
+  border: 2px solid black;
+  border-radius: 5px;
+  line-height: 30px;
+}
+
+#github-logo {
+  float: right;
 }
