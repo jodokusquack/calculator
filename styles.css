@@ -132,15 +132,14 @@ body {
 /* Contact Part */
 #contact {
   font-family: 'Roboto', sans-serif;
-  position: relative;
-  top: 100px;
-  display: inline-block;
+  display: block;
   padding: 10px 30px 5px;
   background-color: rgba(255, 255, 255, 0.9);
   width: 500px;
   border: 2px solid black;
   border-radius: 5px;
   line-height: 30px;
+  margin: 60px auto;
 }
 
 #github-logo {
