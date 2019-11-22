@@ -196,7 +196,7 @@ class Calculation {
   }
 
   decimal() {
-    if (!Number.isInteger(this.tempNumber)) {
+    if (Number.isInteger(Number(this.tempNumber))) {
       this.updateText('.');
       this.tempNumber += '.';
       expressionField.scrollLeft = expressionField.scrollWidth;
@@ -217,14 +217,10 @@ class Calculation {
     if (this.tempNumber !== '') {
       this.text = this.text.slice(0, -1);
       this.tempNumber = this.tempNumber.slice(0, -1);
-      console.log(this.tempNumber);
-      console.log(this.expression);
     } else if (this.tempNumber === '') {
       this.text = this.text.slice(0, -3);
       this.expression.pop();
       this.tempNumber = this.expression.pop();
-      console.log(this.tempNumber);
-      console.log(this.expression);
     }
   }
 
@@ -297,3 +293,25 @@ rootButton.addEventListener('click', () => {
 backspaceButton.addEventListener('click', () => {
   currentExpression.backspace();
 });
+
+// Keyboard support //
+function keydown(e) {
+  if (!isNaN(Number(e.key))) {
+    currentExpression.numberPressed(Number(e.key));
+  } else if (e.key === ',' || e.key === '.') {
+    currentExpression.decimal();
+  } else if (['+', '-', '*', '/'].includes(e.key)) {
+    const operation = {
+      '+': 'add',
+      '-': 'subtract',
+      '*': 'multiply',
+      '/': 'divide',
+    };
+    currentExpression.normalOperatorPressed(operation[e.key]);
+  } else if (e.key === 'Enter') {
+    currentExpression.evaluatePressed();
+  } else if (e.key === 'Backspace') {
+    currentExpression.backspace();
+  }
+}
+window.addEventListener('keydown', keydown);
